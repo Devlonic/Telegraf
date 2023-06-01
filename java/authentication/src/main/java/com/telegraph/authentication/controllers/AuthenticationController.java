@@ -9,7 +9,9 @@ import com.telegraph.authentication.models.User;
 import com.telegraph.authentication.security.jwt.JwtUtils;
 import com.telegraph.authentication.security.services.UserDetailsImpl;
 import jakarta.validation.Valid;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -20,9 +22,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthenticationController {
     @Autowired
     AuthenticationManager authenticationManager;
@@ -37,7 +40,7 @@ public class AuthenticationController {
     JwtUtils jwtUtils;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser( @RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getName(), loginRequest.getPassword()));
@@ -57,7 +60,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<?> registerUser( @RequestBody @NotNull SignupRequest signUpRequest) {
         if (userRepository.existsByName(signUpRequest.getName())) {
             return ResponseEntity
                     .badRequest()
@@ -79,4 +82,5 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+
 }
