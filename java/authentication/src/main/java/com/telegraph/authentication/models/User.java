@@ -1,10 +1,11 @@
 package com.telegraph.authentication.models;
 
 import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -22,8 +23,13 @@ public class User {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @NotNull
     private String name;
+
+    @NotNull
     private String passwordHash;
+
+    @NotNull
     private String email;
     @ManyToMany(mappedBy = "channelUsers")
     private List<Channel> channels;

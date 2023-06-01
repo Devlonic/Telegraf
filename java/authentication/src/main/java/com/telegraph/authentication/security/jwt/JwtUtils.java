@@ -38,7 +38,8 @@ public class JwtUtils {
     }
 
     private Key key() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+        byte[] secretBytes = Decoders.BASE64.decode(jwtSecret);
+        return Keys.hmacShaKeyFor(secretBytes);
     }
 
     public String getUserNameFromJwtToken(String token) {

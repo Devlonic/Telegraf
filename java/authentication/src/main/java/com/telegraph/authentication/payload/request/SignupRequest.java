@@ -1,13 +1,13 @@
 package com.telegraph.authentication.payload.request;
 
-import java.util.Set;
+
 
 import jakarta.validation.constraints.*;
 
 public class SignupRequest {
     @NotBlank
     @Size(min = 3, max = 20)
-    private String name;
+    private String username;
 
     @NotBlank
     @Size(max = 50)
@@ -18,12 +18,12 @@ public class SignupRequest {
     @Size(min = 6, max = 40)
     private String password;
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
     public void setName(String username) {
-        this.name = name;
+        this.username = username;
     }
 
     public String getEmail() {
@@ -42,4 +42,12 @@ public class SignupRequest {
         this.password = password;
     }
 
+    @Override
+    public String toString() {
+        return "SignupRequest{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }
