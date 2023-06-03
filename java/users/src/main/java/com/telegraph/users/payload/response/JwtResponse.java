@@ -1,6 +1,9 @@
-package com.telegraph.authentication.payload.response;import java.util.List;
+package com.telegraph.users.payload.response;
 
-public class JwtResponse {
+import java.io.Serializable;
+import java.util.List;
+
+public class JwtResponse implements Serializable {
     private String token;
     private String type = "Bearer";
     private Long id;
@@ -17,6 +20,7 @@ public class JwtResponse {
     public JwtResponse() {
 
     }
+
     public String getAccessToken() {
         return token;
     }

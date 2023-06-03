@@ -3,6 +3,7 @@ import java.security.Key;
 import java.util.Date;
 
 import com.telegraph.authentication.security.services.UserDetailsImpl;
+import io.jsonwebtoken.security.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,7 +54,11 @@ public class JwtUtils {
         try {
             Jwts.parser().setSigningKey(key()).parse(authToken);
             return true;
-        } catch (MalformedJwtException e) {
+        }
+        catch (SignatureException e) {
+            logger.error("JWT signature does not match locally computed signature: {}", e.getMessage());
+        }
+        catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
             logger.error("JWT token is expired: {}", e.getMessage());

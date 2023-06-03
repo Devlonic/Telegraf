@@ -1,16 +1,12 @@
 package com.telegraph.authentication.controllers;
 
-import com.telegraph.authentication.payload.request.LoginRequest;
-import com.telegraph.authentication.payload.request.SignupRequest;
-import com.telegraph.authentication.payload.response.JwtResponse;
-import com.telegraph.authentication.payload.response.MessageResponse;
-import com.telegraph.authentication.rep.UserRepository;
 import com.telegraph.authentication.models.User;
-import com.telegraph.authentication.security.jwt.AuthEntryPointJwt;
+import com.telegraph.authentication.payload.request.JwtRequest;
+import com.telegraph.authentication.payload.request.LoginRequest;
+import com.telegraph.authentication.payload.response.JwtResponse;
+import com.telegraph.authentication.rep.UserRepository;
 import com.telegraph.authentication.security.jwt.JwtUtils;
 import com.telegraph.authentication.security.services.UserDetailsImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,10 +32,21 @@ public class AuthenticationController {
 
     @Autowired
     JwtUtils jwtUtils;
-    private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);
-    @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser( @RequestBody LoginRequest loginRequest) {
 
+    @PostMapping("/validate")
+    public ResponseEntity<?> validate( @RequestBody JwtRequest token) {
+        if (jwtUtils.validateJwtToken(token.getAccessToken())){
+            User temp = userRepository.findByName(jwtUtils.getUserNameFromJwtToken(token.getAccessToken())).get();
+            return ResponseEntity.ok(new JwtResponse(token.getAccessToken(),
+                    temp.getId(),
+                    temp.getName(),
+                    temp.getEmail()));
+            }
+        else return ResponseEntity.ok("JWT signature does not match locally computed signature");
+    }
+
+    @PostMapping("/sign")
+    public ResponseEntity<?> sign(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -55,42 +62,6 @@ public class AuthenticationController {
                 userDetails.getEmail()));
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser( @RequestBody SignupRequest signUpRequest) {
 
-        if (userRepository.existsByName(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Name is already taken!"));
-        }
-
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
-        }
-
-
-        User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
-
-        userRepository.save(user);
-
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-    }
-
-    @GetMapping("/getUserData")
-    public ResponseEntity<?> getUserData( @RequestBody String authToken) {
-
-        if (!jwtUtils.validateJwtToken(authToken)) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Bad JWT token"));
-        }
-
-
-        return ResponseEntity.ok(new MessageResponse(  userRepository.findByName(jwtUtils.getUserNameFromJwtToken(authToken)).get().toString()  ));
-    }
 
 }

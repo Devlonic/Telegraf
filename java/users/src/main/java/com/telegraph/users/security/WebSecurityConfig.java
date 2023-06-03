@@ -1,8 +1,8 @@
-package com.telegraph.authentication.security;
+package com.telegraph.users.security;
 
-import com.telegraph.authentication.security.jwt.AuthEntryPointJwt;
-import com.telegraph.authentication.security.jwt.AuthTokenFilter;
-import com.telegraph.authentication.security.services.UserDetailsServiceImpl;
+import com.telegraph.users.security.jwt.AuthEntryPointJwt;
+
+import com.telegraph.users.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,10 +28,7 @@ public class WebSecurityConfig {
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
-    @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
-    }
+
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -59,14 +56,11 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/v1/auth/**").permitAll()
+                        auth.requestMatchers("/api/v1/users/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());
-
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 }
