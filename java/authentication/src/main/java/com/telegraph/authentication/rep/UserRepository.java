@@ -1,4 +1,5 @@
 package com.telegraph.authentication.rep;
+
 import com.telegraph.authentication.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

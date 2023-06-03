@@ -1,4 +1,4 @@
-package com.telegraph.authentication.payload.response;import java.util.List;
+package com.telegraph.authentication.payload.response;
 
 public class JwtResponse {
     private String token;
@@ -14,9 +14,11 @@ public class JwtResponse {
         this.email = email;
 
     }
+
     public JwtResponse() {
 
     }
+
     public String getAccessToken() {
         return token;
     }

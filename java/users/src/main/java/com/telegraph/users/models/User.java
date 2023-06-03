@@ -1,7 +1,6 @@
 package com.telegraph.users.models;
 
 import jakarta.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -48,7 +47,7 @@ public class User {
 
     public User(String name, String email, String encode) {
         this.name = name;
-        this.email =email;
+        this.email = email;
         this.passwordHash = encode;
     }
 

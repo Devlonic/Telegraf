@@ -11,7 +11,8 @@ public class JwtRequest {
         this.accessToken = accessToken;
     }
 
-    public JwtRequest() {}
+    public JwtRequest() {
+    }
 
     public String getAccessToken() {
         return accessToken;

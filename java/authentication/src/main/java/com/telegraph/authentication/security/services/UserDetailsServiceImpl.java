@@ -2,7 +2,6 @@ package com.telegraph.authentication.security.services;
 
 import com.telegraph.authentication.models.User;
 import com.telegraph.authentication.rep.UserRepository;
-import com.telegraph.authentication.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

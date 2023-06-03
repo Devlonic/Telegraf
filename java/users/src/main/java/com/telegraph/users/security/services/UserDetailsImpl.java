@@ -1,13 +1,12 @@
 package com.telegraph.users.security.services;
 
-import java.util.Collection;
-import java.util.Objects;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.telegraph.users.models.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Collection;
+import java.util.Objects;
 
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
@@ -23,13 +22,14 @@ public class UserDetailsImpl implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username,String email, String password
-                          ) {
+    public UserDetailsImpl(Long id, String username, String email, String password
+    ) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
     }
+
     public static UserDetailsImpl build(User user) {
 
 
@@ -38,7 +38,7 @@ public class UserDetailsImpl implements UserDetails {
                 user.getName(),
                 user.getEmail(),
                 user.getPasswordHash()
-                );
+        );
     }
 
     public String getEmail() {

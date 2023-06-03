@@ -1,4 +1,5 @@
 package com.telegraph.users.rep;
+
 import com.telegraph.users.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

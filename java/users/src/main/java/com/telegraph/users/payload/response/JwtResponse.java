@@ -1,7 +1,6 @@
 package com.telegraph.users.payload.response;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class JwtResponse implements Serializable {
     private String token;
@@ -17,6 +16,7 @@ public class JwtResponse implements Serializable {
         this.email = email;
 
     }
+
     public JwtResponse() {
 
     }

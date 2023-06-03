@@ -10,11 +10,11 @@ import com.telegraph.authentication.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -34,15 +34,14 @@ public class AuthenticationController {
     JwtUtils jwtUtils;
 
     @PostMapping("/validate")
-    public ResponseEntity<?> validate( @RequestBody JwtRequest token) {
-        if (jwtUtils.validateJwtToken(token.getAccessToken())){
+    public ResponseEntity<?> validate(@RequestBody JwtRequest token) {
+        if (jwtUtils.validateJwtToken(token.getAccessToken())) {
             User temp = userRepository.findByName(jwtUtils.getUserNameFromJwtToken(token.getAccessToken())).get();
             return ResponseEntity.ok(new JwtResponse(token.getAccessToken(),
                     temp.getId(),
                     temp.getName(),
                     temp.getEmail()));
-            }
-        else return ResponseEntity.ok("JWT signature does not match locally computed signature");
+        } else return ResponseEntity.ok("JWT signature does not match locally computed signature");
     }
 
     @PostMapping("/sign")
@@ -61,7 +60,6 @@ public class AuthenticationController {
                 userDetails.getUsername(),
                 userDetails.getEmail()));
     }
-
 
 
 }
