@@ -32,7 +32,7 @@ const CropperDialog: React.FC<ICroppedModal> = ({
       );
       setCropper(cropperObj);
     }
-  });
+  }, []);
 
   // show/hide modal window
   const toggleModal = async () => {

@@ -13,7 +13,7 @@ const DangerDialog: React.FC<IDangerModal> = ({
 }) => {
   const [shown, setShown] = useState<boolean>(isShown);
 
-  useEffect(() => {});
+  useEffect(() => {}, []);
 
   // show/hide modal window
   const toggleModal = async () => {

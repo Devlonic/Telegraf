@@ -6,7 +6,8 @@ import LoginPage from "./components/auth/LoginPage";
 import RegistrationPage from "./components/auth/RegistrationPage";
 import SignOutPage from "./components/auth/SignOutPage";
 import IndexPage from "./components/chat/IndexPage";
-import ChannelMessagesPage from "./components/chat/ChannelMessagesPage";
+import ChannelMessagesPage from "./components/chat/ChannelMessagesList";
+import ChatPage from "./components/chat/ChatPage";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
         <Route index element={<IndexPage />}></Route>
         <Route path="chat">
           <Route path="channel">
-            <Route path=":id" element={<ChannelMessagesPage />}></Route>
+            <Route path=":id" element={<ChatPage />}></Route>
           </Route>
           <Route path="private">
             {/* todo */}

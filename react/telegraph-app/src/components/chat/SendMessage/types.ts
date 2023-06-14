@@ -13,3 +13,8 @@ export interface IChatMessage {
 export interface IChatMessagesList {
   list: IChatMessage[];
 }
+
+export interface IChatSendRequest {
+  chat_id: number;
+  message_text: string;
+}

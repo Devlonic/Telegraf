@@ -1,14 +1,20 @@
 import { useParams } from "react-router-dom";
 import { IChatMessageAuthor, IChatMessagesList } from "./types";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 
-const ChannelMessagesPage = () => {
+const ChannelMessagesList = () => {
+  const messagesDiv = useRef<HTMLDivElement>(null);
+
   const { id } = useParams();
 
   const [messages, setMessages] = useState<IChatMessagesList>({ list: [] });
 
   useEffect(() => {
+    if (messagesDiv.current) {
+      messagesDiv.current.scrollTop = messagesDiv.current.scrollHeight; // scroll to bottom of element
+      console.log("yesmsgdiv");
+    } else console.log("nomsgdiv");
     // todo load messages from API
     setMessages({
       list: [
@@ -62,20 +68,58 @@ const ChannelMessagesPage = () => {
             id,
           isSendedByRequester: false,
         },
+        {
+          id: 10,
+          author: { id: 3, name: "zope234" },
+          text:
+            "hello asdfdsadasdasadsadsasdadsadsadsadsdasasdadsasdasdadsasddasasdasd!" +
+            id,
+          isSendedByRequester: false,
+        },
+        {
+          id: 11,
+          author: { id: 3, name: "Vasya228" },
+          text:
+            "hello asdfdsadasdasadsadsasdadsadsadsadsdasasdadsasdasdadsasddasasdasd!" +
+            id,
+          isSendedByRequester: true,
+        },
+        {
+          id: 12,
+          author: { id: 3, name: "zope234" },
+          text:
+            "hello asdfdsadasdasadsadsasdadsadsadsadsdasasdadsasdasdadsasddasasdasd!" +
+            id,
+          isSendedByRequester: false,
+        },
+        {
+          id: 13,
+          author: { id: 3, name: "zope234" },
+          text:
+            "hello asdfdsadasdasadsadsasdadsadsadsadsdasasdadsasdasdadsasddasasdasd!" +
+            id,
+          isSendedByRequester: false,
+        },
+        {
+          id: 14,
+          author: { id: 3, name: "zope234" },
+          text:
+            "hello asdfdsadasdasadsadsasdadsadsadsadsdasasdadsasdasdadsasddasasdasd!" +
+            id,
+          isSendedByRequester: false,
+        },
       ],
     });
   }, [id]);
+
   const viewData = messages.list.map((message) => (
     <div
+      key={message.id}
       className={classNames("wrapper d-flex", {
         "justify-content-end": message.isSendedByRequester == true,
       })}
     >
-      <div
-        key={message.id}
-        className="card m-3 bg-light"
-        style={{ width: "18rem" }}
-      >
+      <div className="card m-3 bg-light" style={{ width: "18rem" }}>
         <div className="card-body">
           <h5 className="card-title">{message.author.name}</h5>
           <p className="card-text">{message.text}</p>
@@ -85,11 +129,14 @@ const ChannelMessagesPage = () => {
   ));
   return (
     <>
-      <div className="container-fluid overflow-y-scroll h-100">
+      <div
+        ref={messagesDiv}
+        className="container-fluid overflow-y-scroll bg-black h-100"
+      >
         <div className="container">{viewData}</div>
       </div>
     </>
   );
 };
 
-export default ChannelMessagesPage;
+export default ChannelMessagesList;

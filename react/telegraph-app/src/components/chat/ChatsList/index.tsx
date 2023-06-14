@@ -26,7 +26,7 @@ const ChatsList = () => {
         { id: 9, title: "Channel 10", type: "channel" },
       ],
     });
-  });
+  }, []);
 
   let localID = -1;
   if (id != undefined) localID = parseInt(id);
