@@ -131,7 +131,7 @@ const LoginPage = () => {
                   <div className="invalid-feedback">{errors.password}</div>
                 )}
               </div>
-              <button type="submit" className="btn btn-primary">
+              <button type="submit" className="btn btn-primary w-100">
                 Sign in
               </button>
               {/* {errors.error && <div className="text-danger">{errors.error}</div>} */}

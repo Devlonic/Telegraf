@@ -8,14 +8,16 @@ import {
   isSignedIn,
   storeToken,
 } from "../../../services/tokenService";
+import { AxiosError } from "axios";
+import * as yup from "yup";
+import { useFormik } from "formik";
 import {
   IRegistrationRequest,
   IRegistrationRequestError,
   IRegistrationResponce,
 } from "./types";
-import CropperDialog from "../../common/CropperDialog";
 
-const RegistrationPage = () => {
+const LoginPage = () => {
   const navigator = useNavigate();
 
   useEffect(() => {
@@ -24,68 +26,61 @@ const RegistrationPage = () => {
     }
   });
 
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [errors, setErrors] = useState<IRegistrationRequestError>({
+  const initValues: IRegistrationRequest = {
+    username: "",
     email: "",
-    tel: "",
-    photo: "",
     password: "",
-    password_confirmation: "",
-    name: "",
-    surname: "",
-    error: "",
-  });
-  const [dto, setDto] = useState<IRegistrationRequest>({
-    email: "",
-    tel: "",
-    photo: null,
-    password: "",
-    password_confirmation: "",
-    name: "",
-    surname: "",
-  });
-
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setDto({ ...dto, [e.target.name]: e.target.value });
   };
 
-  const onRegistrationHandler = async (e: any) => {
+  const registrationSchema = yup.object({
+    username: yup.string().required("Enter username"),
+    email: yup.string().required("Enter email").email("Email format error"),
+    password: yup.string().required("Enter password"),
+  });
+
+  const [responceError, setResponceError] = useState<string>();
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+
+  const onSubmitFormikData = async (values: IRegistrationRequest) => {
     try {
       await setIsProcessing(true);
-      var resp = await usersHttp.post(`signup`, dto, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      var resp = await usersHttp.post(`signup`, values);
       var respData = resp.data as IRegistrationResponce;
       console.log("resp = ", respData);
-      navigator("../login");
+      navigator("/");
       await setIsProcessing(false);
     } catch (e: any) {
-      const errors = e.response.data as IRegistrationRequestError;
-      setErrors(errors);
-      console.log("Server error", errors);
       await setIsProcessing(false);
+      const er = e as AxiosError;
+
+      let errors = er?.response?.data as IRegistrationRequestError;
+
+      if (errors == null) setResponceError(er.message);
+      else setResponceError(errors.message);
+
+      console.log("Server error", er);
     }
   };
 
-  const onImageChangeHandler = (f: File) => {
-    console.log("image input handle change", f);
-    if (f != null) {
-      onImageSaveHandler(f);
-    }
-  };
-  const onImageSaveHandler = (file: File) => {
-    console.log("image save handle", file);
-    setDto({ ...dto, photo: file });
-  };
+  const formik = useFormik({
+    initialValues: initValues,
+    validationSchema: registrationSchema,
+    onSubmit: onSubmitFormikData,
+  });
+
+  const { values, errors, touched, handleSubmit, handleChange } = formik;
 
   return (
     <div className="d-flex justify-content-center">
-      <div className="w-50">
+      <div className="w-25">
         <h1 className="text-center">Registration</h1>
+        {responceError && (
+          <div className="alert alert-danger" role="alert">
+            {responceError}
+          </div>
+        )}
         {isProcessing && (
-          <div className="">
+          <div className="wrapper">
             <div className="row">
               <div className="col"></div>
               <div className="col">
@@ -103,140 +98,71 @@ const RegistrationPage = () => {
           </div>
         )}
         {!isProcessing && (
-          <div className="wrapper">
-            <div className="mb-3">
-              <label htmlFor="name" className="form-label">
-                Name
-              </label>
-              <input
-                type="text"
-                className={classNames("form-control", {
-                  "is-invalid": errors.name,
-                })}
-                id="name"
-                name="name"
-                value={dto.name}
-                onChange={onChangeHandler}
-              />
-              {errors.name && (
-                <div className="invalid-feedback">{errors.name}</div>
-              )}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="surname" className="form-label">
-                Surname
-              </label>
-              <input
-                type="text"
-                className={classNames("form-control", {
-                  "is-invalid": errors.surname,
-                })}
-                id="surname"
-                name="surname"
-                value={dto.surname}
-                onChange={onChangeHandler}
-              />
-              {errors.surname && (
-                <div className="invalid-feedback">{errors.surname}</div>
-              )}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="tel" className="form-label">
-                Telephone
-              </label>
-              <input
-                type="tel"
-                className={classNames("form-control", {
-                  "is-invalid": errors.tel,
-                })}
-                id="tel"
-                name="tel"
-                value={dto.tel}
-                onChange={onChangeHandler}
-              />
-              {errors.tel && (
-                <div className="invalid-feedback">{errors.tel}</div>
-              )}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Email
-              </label>
-              <input
-                type="email"
-                className={classNames("form-control", {
-                  "is-invalid": errors.email,
-                })}
-                id="email"
-                name="email"
-                value={dto.email}
-                onChange={onChangeHandler}
-              />
-              {errors.email && (
-                <div className="invalid-feedback">{errors.email}</div>
-              )}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                className={classNames("form-control", {
-                  "is-invalid": errors.password,
-                })}
-                name="password"
-                value={dto.password}
-                onChange={onChangeHandler}
-              />
-              {errors.password && (
-                <div className="invalid-feedback">{errors.password}</div>
-              )}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="password_confirmation" className="form-label">
-                Repeat password
-              </label>
-              <input
-                type="password"
-                id="password_confirmation"
-                className={classNames("form-control", {
-                  "is-invalid": errors.password_confirmation,
-                })}
-                name="password_confirmation"
-                value={dto.password_confirmation}
-                onChange={onChangeHandler}
-              />
-              {errors.password_confirmation && (
-                <div className="invalid-feedback">
-                  {errors.password_confirmation}
-                </div>
-              )}
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Photo</label>
-              <CropperDialog
-                onSave={onImageChangeHandler}
-                error={errors.photo}
-              ></CropperDialog>
-            </div>
-            <div className="mb-3">
-              <button
-                onClick={onRegistrationHandler}
-                type="button"
-                className="btn btn-primary w-100"
-              >
+          <form onSubmit={handleSubmit} autoComplete="new-password">
+            <div className="wrapper">
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  className={classNames("form-control", {
+                    "is-invalid": errors.username && touched.username,
+                  })}
+                  id="username"
+                  name="username"
+                  value={values.username}
+                  onChange={handleChange}
+                />
+                {errors.username && touched.username && (
+                  <div className="invalid-feedback">{errors.username}</div>
+                )}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  className={classNames("form-control", {
+                    "is-invalid": errors.password,
+                  })}
+                  name="password"
+                  value={values.password}
+                  onChange={handleChange}
+                />
+                {errors.password && touched.password && (
+                  <div className="invalid-feedback">{errors.password}</div>
+                )}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  className={classNames("form-control", {
+                    "is-invalid": errors.email && touched.email,
+                  })}
+                  id="email"
+                  name="email"
+                  value={values.email}
+                  onChange={handleChange}
+                />
+                {errors.email && touched.email && (
+                  <div className="invalid-feedback">{errors.email}</div>
+                )}
+              </div>
+              <button type="submit" className="btn btn-success w-100">
                 Sign up!
               </button>
             </div>
-
-            {errors.error && <div className="text-danger">{errors.error}</div>}
-          </div>
+          </form>
         )}
       </div>
     </div>
   );
 };
 
-export default RegistrationPage;
+export default LoginPage;
