@@ -1,15 +1,19 @@
 export interface ILoginRequest {
-  email: string;
+  username: string;
   password: string;
 }
 
 export interface ILoginRequestError {
-  email: string;
-  password: string;
+  path: string;
   error: string;
+  message: string;
+  status: number;
 }
 
 export interface ILoginResponce {
-  access_token: string;
-  expires_in: number;
+  id: number;
+  name: string;
+  email: string;
+  tokenType: string;
+  accessToken: string;
 }

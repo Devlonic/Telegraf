@@ -1,9 +1,10 @@
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import { APP_ENV } from "../env";
 
 export const storeToken = (token: string) => {
   localStorage.setItem("token", token);
-  http = axios.create({
+  usersHttp = axios.create({
     headers: {
       Authorization: `Bearer ${getToken()}`,
     },
@@ -29,7 +30,8 @@ export const isSignedIn = (): boolean => {
   return t != null && t != "" && t != undefined;
 };
 
-export var http = axios.create({
+export var usersHttp = axios.create({
+  baseURL: APP_ENV.USERS_API,
   headers: {
     Authorization: `Bearer ${getToken()}`,
   },

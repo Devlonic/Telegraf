@@ -3,7 +3,11 @@ import { ChangeEvent, useEffect, useState } from "react";
 import ReactLoading from "react-loading";
 import { useNavigate } from "react-router-dom";
 import { APP_ENV } from "../../../env";
-import { http, isSignedIn, storeToken } from "../../../services/tokenService";
+import {
+  usersHttp,
+  isSignedIn,
+  storeToken,
+} from "../../../services/tokenService";
 import {
   IRegistrationRequest,
   IRegistrationRequestError,
@@ -48,7 +52,7 @@ const RegistrationPage = () => {
   const onRegistrationHandler = async (e: any) => {
     try {
       await setIsProcessing(true);
-      var resp = await http.post(`${APP_ENV.BASE_URL}api/auth/register`, dto, {
+      var resp = await usersHttp.post(`signup`, dto, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
