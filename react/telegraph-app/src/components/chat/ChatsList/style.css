@@ -1,0 +1,18 @@
+.circle {
+  width: 5em;
+  height: 5em;
+  background-color: red;
+  border-radius: 50%;
+}
+
+.no-wrap {
+}
+
+.msg-one-line {
+  white-space: nowrap;
+}
+
+.h-80-vh {
+  max-height: 90vh;
+  overflow-y: scroll;
+}

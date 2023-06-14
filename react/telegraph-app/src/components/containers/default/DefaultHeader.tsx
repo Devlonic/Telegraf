@@ -6,7 +6,7 @@ const DefaultHeader = () => {
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container">
           <Link className="navbar-brand" to="/">
-            Товари
+            Telegraf
           </Link>
           <button
             className="navbar-toggler"
@@ -27,17 +27,7 @@ const DefaultHeader = () => {
                 </Link>
               </li>
             </ul>
-            <form className="d-flex" role="search">
-              <input
-                className="form-control me-2"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button className="btn btn-outline-success" type="submit">
-                Пошук
-              </button>
-            </form>
+
             <Link
               className="btn btn-outline-secondary"
               aria-current="page"
