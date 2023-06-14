@@ -1,4 +1,4 @@
-package com.telegraph.authentication.models;
+package com.telegraph.users.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

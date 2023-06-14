@@ -9,10 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.telegraph</groupId>
-    <artifactId>authentication</artifactId>
+    <artifactId>users</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>authentication</name>
-    <description>Demo project for Spring Boot</description>
+    <name>users</name>
     <properties>
         <java.version>17</java.version>
     </properties>
