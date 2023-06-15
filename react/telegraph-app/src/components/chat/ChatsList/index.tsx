@@ -1,40 +1,51 @@
 import { Link, useParams } from "react-router-dom";
 import "./style.css";
 import { useEffect, useState } from "react";
-import { IChatsList } from "./types";
 import classNames from "classnames";
+import { getAllChatsAsync } from "../../../services/chat/chatService";
+import { AxiosError } from "axios";
+import {
+  IChatPreview,
+  IGetChatsListRequestError,
+} from "../../../services/chat/types";
+import ReactLoading from "react-loading";
 
 const ChatsList = () => {
   const { id } = useParams();
 
-  const [chats, setChats] = useState<IChatsList>({ list: [] });
-
+  const [chats, setChats] = useState<IChatPreview[]>([]);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [responceError, setResponceError] = useState<string>();
   useEffect(() => {
     // todo load chats from API
 
-    setChats({
-      list: [
-        { id: 0, title: "Channel 1", type: "channel" },
-        { id: 1, title: "Channel 2", type: "channel" },
-        { id: 2, title: "Channel 3", type: "channel" },
-        { id: 3, title: "Channel 4", type: "channel" },
-        { id: 4, title: "Channel 5", type: "channel" },
-        { id: 5, title: "Channel 6", type: "channel" },
-        { id: 6, title: "Channel 7", type: "channel" },
-        { id: 7, title: "Channel 8", type: "channel" },
-        { id: 8, title: "Channel 9", type: "channel" },
-        { id: 9, title: "Channel 10", type: "channel" },
-      ],
-    });
+    const fetchData = async () => {
+      try {
+        await setIsProcessing(true);
+        var respData = await getAllChatsAsync({});
+        console.log(" ChatsList resp = ", respData);
+        await setChats(respData);
+        await setIsProcessing(false);
+      } catch (e: any) {
+        await setIsProcessing(false);
+        const er = e as AxiosError;
+        let errors = er?.response?.data as IGetChatsListRequestError;
+        if (errors == null) setResponceError(er.message);
+        else setResponceError(errors.message);
+
+        console.log("Server error", er);
+      }
+    };
+    fetchData();
   }, []);
 
   let localID = -1;
   if (id != undefined) localID = parseInt(id);
 
-  const viewData = chats.list.map((chat) => (
+  const viewData = chats.map((chat) => (
     <Link
       key={chat.id}
-      to={`/chat/${chat.type}/${chat.id}`}
+      to={`/chat/channel/${chat.id}`}
       className={classNames("list-group-item list-group-item-action", {
         active: chat.id == localID,
       })}
@@ -46,7 +57,7 @@ const ChatsList = () => {
         </div>
         <div className="col">
           <div className="row h-50">
-            <span className="text-black fs-4">{chat.title}</span>
+            <span className="text-black fs-4">{chat.name}</span>
           </div>
         </div>
       </div>
@@ -55,21 +66,43 @@ const ChatsList = () => {
 
   return (
     <div className="dialogs w-100">
-      <div className="scearch-form-wrapper p-1">
-        <form className="d-flex" role="search">
-          <input
-            className="form-control me-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
-          <button className="btn btn-success" type="submit">
-            Пошук
-          </button>
-        </form>
-      </div>
+      {isProcessing && (
+        <div className="wrapper">
+          <div className="row">
+            <div className="col"></div>
+            <div className="col">
+              <div className="d-flex justify-content-center">
+                <ReactLoading
+                  type="bars"
+                  color="gray"
+                  height={"100%"}
+                  width={"100%"}
+                ></ReactLoading>
+              </div>
+            </div>
+            <div className="col"></div>
+          </div>
+        </div>
+      )}
+      {!isProcessing && (
+        <>
+          <div className="scearch-form-wrapper p-1">
+            <form className="d-flex" role="search">
+              <input
+                className="form-control me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              <button className="btn btn-success" type="submit">
+                Пошук
+              </button>
+            </form>
+          </div>
 
-      <div className="list-group h-80-vh">{viewData}</div>
+          <div className="list-group h-80-vh">{viewData}</div>
+        </>
+      )}
     </div>
   );
 };
