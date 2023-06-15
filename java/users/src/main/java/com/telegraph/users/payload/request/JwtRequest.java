@@ -2,6 +2,7 @@ package com.telegraph.users.payload.request;
 
 
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.util.StringUtils;
 
 public class JwtRequest {
     @NotBlank
@@ -27,5 +28,17 @@ public class JwtRequest {
         return "JwtRequest{" +
                 "accessToken='" + accessToken + '\'' +
                 '}';
+    }
+
+    public static JwtRequest toJWT(String accessToken){
+        return  new JwtRequest(parseJwt(accessToken));
+
+    }
+    public static String parseJwt(String headerAuth) {
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+            return headerAuth.substring(7);
+        }
+
+        return null;
     }
 }

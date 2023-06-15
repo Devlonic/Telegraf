@@ -51,20 +51,7 @@ public class User {
         this.passwordHash = encode;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", passwordHash='" + passwordHash + '\'' +
-                ", email='" + email + '\'' +
-                ", channels=" + channels +
-                ", channelsCreator=" + channelsCreator +
-                ", senderPrivateMessage=" + senderPrivateMessage +
-                ", receiverPrivateMessage=" + receiverPrivateMessage +
-                ", senderChannelMessage=" + senderChannelMessage +
-                '}';
-    }
+
 
     @Override
     public boolean equals(Object o) {
