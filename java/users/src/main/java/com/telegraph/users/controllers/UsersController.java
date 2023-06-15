@@ -7,7 +7,9 @@ import com.telegraph.users.payload.request.SignupRequest;
 import com.telegraph.users.payload.response.JwtResponse;
 import com.telegraph.users.payload.response.MessageResponse;
 import com.telegraph.users.rep.UserRepository;
+import com.telegraph.users.security.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,13 +30,19 @@ public class UsersController {
     AuthenticationManager authenticationManager;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
     PasswordEncoder encoder;
 
 
-    static final String authUrl = "http://localhost:8080/";
+    @Value("${app.authUrl}")
+    private String authUrl;
+    @Value("${app.usersUrl}")
+    private String usersUrl;
+
+    @Value("${app.chatsUrl}")
+    private String chatsUrl;
 
     @Autowired
     private RestTemplate authTemplate;
@@ -61,13 +69,13 @@ public class UsersController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
 
-        if (userRepository.existsByName(signUpRequest.getUsername())) {
+        if (userService.existsByName(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Name is already taken!"));
         }
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userService.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
@@ -78,25 +86,25 @@ public class UsersController {
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
 
-        userRepository.save(user);
+        userService.saveUser(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
     @GetMapping("/info")
-    public ResponseEntity<?> getUserData(@RequestBody JwtRequest authToken) throws Exception {
+    public ResponseEntity<?> getUserData(@RequestHeader(HttpHeaders.AUTHORIZATION)String authToken) throws Exception {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        HttpEntity<JwtRequest> entity = new HttpEntity<JwtRequest>(authToken, headers);
+        HttpEntity<JwtRequest> entity = new HttpEntity<JwtRequest>(JwtRequest.toJWT(authToken), headers);
 
         try {
             JwtResponse isValid = authTemplate.exchange(authUrl + "api/v1/auth/validate", HttpMethod.POST, entity, JwtResponse.class).getBody();
-            return ResponseEntity.ok(userRepository.findByName(isValid.getName()).get());
+            return ResponseEntity.ok(userService.getUserByName(isValid.getName()).get());
         } catch (Exception e) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Bad JWT token"));
+                    .body(new MessageResponse("Error:" + e.getMessage()));
         }
 
     }

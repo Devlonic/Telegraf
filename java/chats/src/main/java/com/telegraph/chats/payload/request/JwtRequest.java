@@ -1,4 +1,4 @@
-package com.telegraph.users.payload.request;
+package com.telegraph.chats.payload.request;
 
 
 import jakarta.validation.constraints.NotBlank;
@@ -30,10 +30,11 @@ public class JwtRequest {
                 '}';
     }
 
-    public static JwtRequest toJWT(String accessToken){
-        return  new JwtRequest(parseJwt(accessToken));
+    public static JwtRequest toJWT(String accessToken) {
+        return new JwtRequest(parseJwt(accessToken));
 
     }
+
     public static String parseJwt(String headerAuth) {
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
             return headerAuth.substring(7);
