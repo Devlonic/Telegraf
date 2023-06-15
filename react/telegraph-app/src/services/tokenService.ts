@@ -33,6 +33,12 @@ export const isSignedIn = (): boolean => {
 export var usersHttp = axios.create({
   baseURL: APP_ENV.USERS_API,
   headers: {
-    Authorization: `Bearer ${getToken()}`,
+    Authorization: `${getToken()}`,
+  },
+});
+export var chatsHttp = axios.create({
+  baseURL: APP_ENV.CHATS_API,
+  headers: {
+    Authorization: `${getToken()}`,
   },
 });

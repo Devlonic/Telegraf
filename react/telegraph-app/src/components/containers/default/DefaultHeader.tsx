@@ -1,8 +1,19 @@
 import { Link } from "react-router-dom";
+import DangerDialog from "../../common/DangerDialog";
+import { useState } from "react";
+import NewChannelDialog from "../../chat/NewChannelDialog";
 
 const DefaultHeader = () => {
+  const [isNewChannelDialogShown, setIsNewChannelDialogShown] =
+    useState<boolean>(false);
+
+  const onNewChannelClick = () => {
+    setIsNewChannelDialogShown(!isNewChannelDialogShown);
+  };
+
   return (
     <header>
+      <NewChannelDialog isShown={isNewChannelDialogShown}></NewChannelDialog>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container">
           <Link className="navbar-brand" to="/">
@@ -27,6 +38,13 @@ const DefaultHeader = () => {
                 </Link>
               </li>
             </ul>
+
+            <button
+              onClick={onNewChannelClick}
+              className="btn btn-outline-primary"
+            >
+              Create new channel
+            </button>
 
             <Link
               className="btn btn-outline-secondary"
