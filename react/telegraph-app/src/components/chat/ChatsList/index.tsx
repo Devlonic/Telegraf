@@ -17,8 +17,6 @@ const ChatsList = () => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [responceError, setResponceError] = useState<string>();
   useEffect(() => {
-    // todo load chats from API
-
     const fetchData = async () => {
       try {
         await setIsProcessing(true);

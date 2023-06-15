@@ -13,6 +13,7 @@ import { useFormik } from "formik";
 import { createChatAsync } from "../../../services/chat/chatService";
 import { AxiosError } from "axios";
 import ReactLoading from "react-loading";
+import { useNavigate } from "react-router-dom";
 
 const NewChannelDialog: React.FC<INewChannelModal> = ({
   text = "Are you sure you want to do this?!",
@@ -21,7 +22,7 @@ const NewChannelDialog: React.FC<INewChannelModal> = ({
   isShown = false,
 }) => {
   const [shown, setShown] = useState<boolean>(isShown);
-
+  const navigator = useNavigate();
   useEffect(() => {
     console.log("NewChannelDialog useeffect");
     setShown((prev) => isShown);
@@ -32,14 +33,12 @@ const NewChannelDialog: React.FC<INewChannelModal> = ({
     await setShown((prev) => !prev);
   };
 
-  const onClickConfirm = async () => {
-    if (onConfirm) await onConfirm();
-    await toggleModal();
-  };
-
   const onClickCancel = async () => {
     if (onCancel) await onCancel();
+
     await toggleModal();
+
+    window.location.reload();
   };
 
   const initValues: ICreateChatRequest = {
@@ -168,7 +167,7 @@ const NewChannelDialog: React.FC<INewChannelModal> = ({
                 data-bs-dismiss="modal"
                 onClick={onClickCancel}
               >
-                Cancel
+                OK
               </button>
             </div>
           </div>
