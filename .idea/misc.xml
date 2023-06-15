@@ -6,6 +6,7 @@
         <option value="$PROJECT_DIR$/java/authentication/pom.xml" />
         <option value="$PROJECT_DIR$/java/users/pom.xml" />
         <option value="$PROJECT_DIR$/java/chats/pom.xml" />
+        <option value="$PROJECT_DIR$/java/messages/pom.xml" />
       </list>
     </option>
   </component>

@@ -1,4 +1,4 @@
-package com.telegraph.chats.models;
+package com.telegraph.messages.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -51,10 +51,7 @@ public class User {
         this.passwordHash = encode;
     }
 
-    @Override
-    public String toString() {
-        return "aboab";
-    }
+
 
     @Override
     public boolean equals(Object o) {

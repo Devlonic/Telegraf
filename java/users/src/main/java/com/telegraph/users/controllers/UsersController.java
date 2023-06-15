@@ -100,11 +100,17 @@ public class UsersController {
 
         try {
             JwtResponse isValid = authTemplate.exchange(authUrl + "api/v1/auth/validate", HttpMethod.POST, entity, JwtResponse.class).getBody();
-            return ResponseEntity.ok(userService.getUserByName(isValid.getName()).get());
+            var response = userService.getUserByName(isValid.getName()).get();
+
+                response.setChannels(null);
+            response.setChannelsCreator(null);
+
+            return ResponseEntity.ok(response  );
+
         } catch (Exception e) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error:" + e.getMessage()));
+                    .body(new MessageResponse("Error: " + e.getMessage()));
         }
 
     }

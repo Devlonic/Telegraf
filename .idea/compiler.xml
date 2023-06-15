@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="chats" />
+        <module name="messages" />
         <module name="users" />
         <module name="authentication" />
       </profile>
@@ -17,6 +18,7 @@
       <module name="authentication (1)" target="17" />
       <module name="basic" target="17" />
       <module name="chats" target="17" />
+      <module name="messages" target="17" />
       <module name="users" target="17" />
     </bytecodeTargetLevel>
   </component>
@@ -26,6 +28,7 @@
       <module name="authentication (1)" options="-parameters" />
       <module name="basic" options="-parameters" />
       <module name="chats" options="-parameters" />
+      <module name="messages" options="-parameters" />
       <module name="users" options="-parameters" />
     </option>
   </component>

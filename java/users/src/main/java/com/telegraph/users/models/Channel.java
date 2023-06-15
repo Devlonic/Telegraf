@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "Channels")
+@Table(name = "channels")
 public class Channel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,10 @@ public class Channel {
     private User creatorUser;
 
     @ManyToMany
-    @JoinTable(name = "channelsUsers", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "channelId"))
+    @JoinTable(
+            name = "channel_users",
+            joinColumns = @JoinColumn(name = "channel_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> channelUsers;
 
     @OneToMany(mappedBy = "receiverChannelMessage")

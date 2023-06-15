@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,21 +22,26 @@ public class Channel {
     private Long id;
     @NotNull
     private String name;
-    @NotNull
+
     @ManyToOne
     @JoinColumn(name = "creatorId", nullable = false)
     private User creatorUser;
 
     @ManyToMany
-    @JoinTable(name = "channelsUsers", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "channelId"))
+    @JoinTable(
+            name = "channel_users",
+            joinColumns = @JoinColumn(name = "channel_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> channelUsers;
-
     @OneToMany(mappedBy = "receiverChannelMessage")
     private List<ChannelMessage> channelMessages;
 
     public Channel(@NotNull String name, @NotNull User creatorUser) {
         this.name = name;
         this.creatorUser = creatorUser;
+        this.channelUsers = new ArrayList<>();
+        channelUsers.add(creatorUser);
+        this.channelMessages = new ArrayList<>();
     }
 
     @Override

@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/Telegraph.iml" filepath="$PROJECT_DIR$/.idea/Telegraph.iml" />
       <module fileurl="file://$PROJECT_DIR$/java/authentication/authentication.iml" filepath="$PROJECT_DIR$/java/authentication/authentication.iml" />
       <module fileurl="file://$PROJECT_DIR$/java/chats/chats.iml" filepath="$PROJECT_DIR$/java/chats/chats.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java/messages/messages.iml" filepath="$PROJECT_DIR$/java/messages/messages.iml" />
       <module fileurl="file://$PROJECT_DIR$/java/users/users.iml" filepath="$PROJECT_DIR$/java/users/users.iml" />
     </modules>
   </component>

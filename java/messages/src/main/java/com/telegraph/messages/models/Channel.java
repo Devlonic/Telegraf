@@ -1,4 +1,4 @@
-package com.telegraph.authentication.models;
+package com.telegraph.messages.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "Channels")
+@Table(name = "channels")
 public class Channel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
