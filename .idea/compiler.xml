@@ -14,12 +14,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="authentication" target="17" />
       <module name="authentication (1)" target="17" />
       <module name="basic" target="17" />
-      <module name="chats" target="17" />
-      <module name="messages" target="17" />
-      <module name="users" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
